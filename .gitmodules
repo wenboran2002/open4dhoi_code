@@ -1,0 +1,3 @@
+[submodule "Annot-app/co-tracker"]
+	path = Annot-app/co-tracker
+	url = git@github.com:facebookresearch/co-tracker.git

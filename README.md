@@ -19,61 +19,62 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 </p>
 
 
-📰 News
+## 📰 News
 
 <!-- 记录项目的更新日志 -->
 
-[2025-12-02] Automatic 4d reconstruction code released!
+[2025-12-02] Annotate app code released!
 
 [2025-12-03] 4DHOISolver code released!
 
-🚀 To Do
+## 🚀 To Do
 
 [x] Release core inference code.
 
-[ ] Release App
+[ ] Release Automatic 4DHOI Reconstruction Code.
 
 [ ] Release Dataset
 
-🛠️ Installation
+## 🛠️ Installation
 
 
 ```
 # Clone this repository
-git clone [https://github.com/username/repo-name.git](https://github.com/username/repo-name.git)
-cd repo-name
 
-# Create environment (Modify requirements.txt as needed)
-conda create -n es_hmr python=3.9
-conda activate es_hmr
-
-# Install PyTorch (Adjust cuda version according to your GPU)
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-
-# Install other dependencies
-pip install -r requirements.txt
-
-# (Optional) Install third-party libraries (e.g., SMPL-X, PyTorch3D)
-# pip install "git+[https://github.com/facebookresearch/pytorch3d.git](https://github.com/facebookresearch/pytorch3d.git)"
 ```
 
-🏃 Auto-Reconstruction / Demo
 
-To run reconstruction on a sample video:
+## 🖥️  Annotate app
+
+### Data Preparation
+You can download the test data from [Google Drive](https://drive.google.com/uc?export=download&id=1a9iUSfuuBrB2q6iewi4uxMAB9XIrvuJo) and place it in ./demo.
+
+The data structure should be like this:
 ```
-python demo.py \
-    --input_path assets/sample_video.mp4 \
-    --checkpoint checkpoints/model_sota.pth \
-    --output_dir results/demo_output \
-    --visualize
+./demo
+├── align ## depth alignment result for initialization
+├── motion ## motion reconstruction from GVHMR
+├── video 
+└── obj_org.obj ## object model
 ```
 
-🖥️ Annotate app
+### Install
+please follow https://github.com/facebookresearch/co-tracker to install co-tracker.
+
+```
+cd Annot-app/co-tracker
+pip install -e .
+```
+
+### Usage
+See `Annot-app/co-tracker/README.md` for more details.
 
 
 
 
-📖 Citation
+
+
+## 📖 Citation
 
 If you find this code useful for your research, please consider citing our paper:
 

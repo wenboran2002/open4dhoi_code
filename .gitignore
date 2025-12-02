@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+*.so
+.DS_Store
+
+# Annot-app
+Annot-app/data_to_annotate
+Annot-app/data/SMPLX_NEUTRAL.npz
+
+## 4DHOISolver
+4DHOISolver/video_optimizer/smpl_models/*
