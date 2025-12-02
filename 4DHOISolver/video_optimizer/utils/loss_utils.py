@@ -16,7 +16,7 @@ from math import exp
 import numpy as np
 from sdf import *
 import torch.nn as nn
-import neural_renderer as nr
+import neural_renderer.neural_renderer as nr
 import torchvision.transforms.functional as TF
 from pytorch3d.ops import knn_points
 from PIL import Image

@@ -7,8 +7,6 @@
 ### 📦 Environment Setup
 
 ```bash
-conda env create -f environment.yml
-conda activate 4dhoi_solver
 cd multiperson/sdf && pip install -e . --no-build-isolation && cd ../..
 cd neural_renderer && pip install -e . --no-build-isolation && cd ../..
 ```

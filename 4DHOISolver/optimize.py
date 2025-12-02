@@ -209,7 +209,7 @@ def optimize_single_record(record):
         return False
     obj_org = o3d.io.read_triangle_mesh(obj_path)
     sampled_obj = obj_org.simplify_quadric_decimation(target_number_of_triangles=1000)
-    obj_poses_path = os.path.join(video_dir, 'output', 'obj_poses.json')
+    obj_poses_path = os.path.join(video_dir, 'align', 'obj_poses.json')
     if not os.path.exists(obj_poses_path):
         print(f"Cannot find object poses: {obj_poses_path}")
         return False
