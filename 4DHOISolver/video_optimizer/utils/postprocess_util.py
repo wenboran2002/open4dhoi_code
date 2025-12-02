@@ -4,7 +4,7 @@ import torch.nn as nn
 import numpy as np
 import gtsam
 import os
-import open3d o3d
+import open3d as o3d
 
 def _kalman_smoothing(transl):
         def apply_kalman(param_list, observation_weight=5.0, transition_cov=0.1, param_name=""):

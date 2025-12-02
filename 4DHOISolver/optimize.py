@@ -136,12 +136,7 @@ def assemble_preview_video(optimized_dir: str, output_path: str, fps: float = 18
     out.release()
     print(f"Preview video saved to: {output_path}")
 def optimize_single_record(record):
-    if not validate_record_for_optimization(record):
-        print("Invalid record, skip")
-        return False
-    video_dir = str(record.get("session_folder", ""))
-    record_id = str(record.get("id", ""))
-    print(f"Start optimizing record: {record.get('object_category')} - {record.get('file_name')}")
+    video_dir = record
     print(f"Video directory: {video_dir}")
     if os.path.exists(Path(video_dir, "video0.mp4")):
         video_path = Path(video_dir, "video0.mp4")
@@ -352,38 +347,13 @@ def optimize_single_record(record):
     }
     with open(os.path.join(video_dir, "optimize_summary.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
-    if update_record_annotation_progress(record_id, 5):
-        print(f"Updated record {record_id} annotation_progress to 5")
-    else:
-        print(f"Failed to update record {record_id} annotation_progress")
     return True
 def main():
-    ready_records = get_records_by_annotation_progress(4)
-    if not ready_records:
-        return
-    print(f"{len(ready_records)} records to optimize:")
-    for i, record in enumerate(ready_records):
-        print(f"  {i+1}. {record.get('object_category', 'Unknown')} - {record.get('file_name', 'Unknown')} (ID: {record.get('id', 'Unknown')})")
-    new_read_records = []
-    for record in ready_records:
-        sesseion_folder = record.get("session_folder", "")
-        new_read_records.append(record)
-    ready_records = new_read_records
-    ready_records = ready_records[:10]
-    success_count = 0
-    for i, record in enumerate(ready_records):
-        sesseion_folder = record.get("session_folder", "")
-        if sesseion_folder != "/data/boran/4dhoi/data_hoi/umbrella/20250729_235245":
-            continue
-        print(sesseion_folder)
-        print(f"\n{'='*60}")
-        print(f"Processing {i+1}/{len(ready_records)} record")
-        print(f"Object category: {record.get('object_category', 'Unknown')}")
-        print(f"File name: {record.get('file_name', 'Unknown')}")
-        print(f"{'='*60}")
-        optimize_single_record(record)
-        success_count += 1
-    print(f"\n Successfully optimized {success_count}/{len(ready_records)} records")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_dir', required=True, help='folder containing final_optimized_parameters')
+    args = parser.parse_args()
+    optimize_single_record(args.data_dir)
+
 if __name__ == "__main__":
     main()
 

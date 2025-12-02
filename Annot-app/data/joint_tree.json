@@ -1,0 +1,109 @@
+{
+  "leftForeArm": [
+    "leftForeArm_back",
+    "leftForeArm_pinky",
+    "leftForeArm_wrist",
+    "leftForeArm_thumb"
+  ],
+  "rightForeArm": [
+    "rightForeArm_back",
+    "rightForeArm_pinky",
+    "rightForeArm_wrist",
+    "rightForeArm_thumb"
+  ],
+  "leftUpperArm": [
+    "leftUpperArm_up",
+    "leftUpperArm_down",
+    "leftUpperArm_back",
+    "leftUpperArm_front"
+  ],
+  "rightUpperArm": [
+    "rightUpperArm_back",
+    "rightUpperArm_up",
+    "rightUpperArm_front",
+    "rightUpperArm_down"
+  ],
+  "leftShoulder": [
+    "leftShoulder_front",
+    "leftShoulder_back"
+  ],
+  "rightShoulder": [
+    "rightShoulder_front",
+    "rightShoulder_back"
+  ],
+  "leftHand": [
+    "leftHand_back",
+    "leftHand_palm",
+    "Thumb_left",
+    "Index_left",
+    "Middle_left",
+    "Ring_left",
+    "Pinky_left"
+  ],
+  "rightHand": [
+    "rightHand_back",
+    "rightHand_palm",
+    "Thumb_right",
+    "Index_right",
+    "Middle_right",
+    "Ring_right",
+    "Pinky_right"
+  ],
+  "leftUpperLeg": [
+    "leftUpperLeg_inner",
+    "leftUpperLeg_outer",
+    "leftUpperLeg_front",
+    "leftUpperLeg_back"
+  ],
+  "rightUpperLeg": [
+    "rightUpperLeg_inner",
+    "rightUpperLeg_outer",
+    "rightUpperLeg_front",
+    "rightUpperLeg_back"
+  ],
+  "leftLowerLeg": [
+    "leftLowerLeg_front",
+    "leftLowerLeg_outer",
+    "leftLowerLeg_back",
+    "leftLowerLeg_inner"
+  ],
+  "rightLowerLeg": [
+    "rightLowerLeg_front",
+    "rightLowerLeg_outer",
+    "rightLowerLeg_back",
+    "rightLowerLeg_inner"
+  ],
+  "leftFoot": [
+    "leftToeBase",
+    "leftFoot_instep",
+    "leftFoot_sole"
+  ],
+  "rightFoot": [
+    "rightToeBase",
+    "rightFoot_instep",
+    "rightFoot_sole"
+  ],
+  "upperSpine": [
+    "upperSpine_back",
+    "upperSpine_right",
+    "upperSpine_front",
+    "upperSpine_left"
+  ],
+  "middleSpine": [
+    "middleSpine_front",
+    "middleSpine_right",
+    "middleSpine_back",
+    "middleSpine_left"
+  ],
+  "leftNeck": [
+    "leftNeck_front",
+    "leftNeck_back"
+  ],
+  "rightNeck": [
+    "rightNeck_back",
+    "rightNeck_front"
+  ],
+  "hip": ["hip_front", "hip_left", "hip_front", "hip_back"],
+  "buttocks_left": ["buttocks_left"],
+  "buttocks_right":["buttocks_right"]
+}

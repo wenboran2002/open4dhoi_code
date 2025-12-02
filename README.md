@@ -57,26 +57,6 @@ pip install -r requirements.txt
 # pip install "git+[https://github.com/facebookresearch/pytorch3d.git](https://github.com/facebookresearch/pytorch3d.git)"
 ```
 
-📂 Data Preparation
-
-Please download the datasets and arrange them in the data/ folder structure as follows:
-```
-<!-- 描述你的数据文件结构 -->
-
-repo-name/
-|-- data/
-|   |-- BEHAVE/
-|   |   |-- images/
-|   |   |-- annotations/
-|   |-- InterCap/
-|   |-- smpl_models/
-|       |-- smplx/
-```
-
-SMPL/SMPL-X Models: Please register and download from the official website.
-
-Datasets: Download BEHAVE or InterCap from their respective sources.
-
 🏃 Auto-Reconstruction / Demo
 
 To run reconstruction on a sample video:
@@ -87,6 +67,11 @@ python demo.py \
     --output_dir results/demo_output \
     --visualize
 ```
+
+🖥️ Annotate app
+
+
+
 
 📖 Citation
 

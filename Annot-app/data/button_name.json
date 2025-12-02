@@ -1,0 +1,24 @@
+{
+  "leftHand": "LH",
+  "leftForeArm": "LFA",
+  "leftUpperArm": "LUA",
+  "leftShoulder": "LSh",
+  "rightShoulder": "RSh",
+  "rightUpperArm": "RUA",
+  "rightForeArm": "RFA",
+  "rightHand": "RH",
+  "leftNeck": "LNe",
+  "rightNeck": "RNe",
+  "upperSpine": "UpSp",
+  "middleSpine": "MidSp",
+  "hip": "Hip",
+  "buttocks_left": "LButt",
+  "buttocks_right": "RButt",
+  "leftUpperLeg": "LUL",
+  "leftLowerLeg": "LLL",
+  "leftFoot": "LF",
+  "rightUpperLeg": "RUL",
+  "rightLowerLeg": "RLL",
+  "rightFoot": "RF"
+}
+
