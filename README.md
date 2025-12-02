@@ -42,6 +42,7 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 ```bash
 conda env create -n 4dhoi_solver python=3.10
 conda activate 4dhoi_solver
+pip install -r requirements.txt
 ```
 
 ## 🖥️  Annotate app
