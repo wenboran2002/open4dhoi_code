@@ -1,4 +1,4 @@
-
+git+https://github.com/facebookresearch/pytorch3d.git@v0.7.6
 torch==2.3.0
 torchvision==0.18.0
 
@@ -40,15 +40,3 @@ probreg==0.3.8
 pykalman==0.10.2
 opencv-contrib-python==4.11.0.86
 pycocotools==2.0.8
-
-# --- Original Comments from YAML ---
-# Note: The following dependencies were marked as REMOVED/UNUSED in the source:
-# - gvhmr (use local utility functions instead)
-# - gradio, fastapi, flask, dash (no web UI)
-# - jupyter, jupyterlab (no notebooks)
-# - oss2, gdown, opendatalab (no cloud storage)
-# - mmdet, mmcv, mmengine (multiperson not used)
-# - pytorch-lightning (no training)
-# - ultralytics, mediapipe (not used)
-# - mayavi, vtk (use open3d/pyrender instead)
-# - All web/audio/video processing tools not actually used

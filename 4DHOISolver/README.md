@@ -10,7 +10,7 @@
 conda env create -f environment.yml
 conda activate 4dhoi_solver
 cd multiperson/sdf && pip install -e . --no-build-isolation && cd ../..
-cd multiperson/neural_renderer && pip install -e . --no-build-isolation && cd ../..
+cd neural_renderer && pip install -e . --no-build-isolation && cd ../..
 ```
 
 ### 🔑 Download SMPL-X Model

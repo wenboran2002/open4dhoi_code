@@ -25,7 +25,7 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 
 [2025-12-02] Annotate app code released!
 
-[2025-12-03] 4DHOISolver code released!
+<!-- [2025-12-03] 4DHOISolver code released! -->
 
 ## 🚀 To Do
 
@@ -59,7 +59,9 @@ The data structure should be like this:
 ```
 
 ### Install
-please follow https://github.com/facebookresearch/co-tracker to install co-tracker.
+please follow https://github.com/facebookresearch/co-tracker to install co-tracker. Remember to download scaled_online.pth from co-tracker and place it in Annot-app/co-tracker/checkpoints/
+
+Then install the Annot-app code:
 
 ```
 cd Annot-app/co-tracker
