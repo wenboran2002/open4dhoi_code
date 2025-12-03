@@ -83,5 +83,13 @@ If you find this code useful for your research, please consider citing our paper
 
 <!-- 替换为你的 BibTeX -->
 ```
-
+@misc{wen2025efficientscalablemonocularhumanobject,
+      title={Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction}, 
+      author={Boran Wen and Ye Lu and Keyan Wan and Sirui Wang and Jiahong Zhou and Junxuan Liang and Xinpeng Liu and Bang Xiao and Dingbang Huang and Ruiyang Liu and Yong-Lu Li},
+      year={2025},
+      eprint={2512.00960},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2512.00960}, 
+}
 ```
