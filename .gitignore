@@ -9,6 +9,7 @@ __pycache__/
 # Annot-app
 Annot-app/data_to_annotate
 Annot-app/data/SMPLX_NEUTRAL.npz
+Annot-app/co-tracker/checkpoints/
 
 ## 4DHOISolver
 4DHOISolver/video_optimizer/smpl_models/*

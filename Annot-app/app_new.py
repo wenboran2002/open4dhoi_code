@@ -69,8 +69,24 @@ model = smplx.create(model_folder, model_type=model_type,
                      num_expression_coeffs=10,
                      use_pca=False,
                      flat_hand_mean=True)
-
+from scipy.spatial.transform import Rotation as R
+def compute_global_rotation(pose_axis_anges, joint_idx):
+    """
+    calculating joints' global rotation
+    Args:
+        pose_axis_anges (np.array): SMPLX's local pose (22,3)
+    Returns:
+        np.array: (3, 3)
+    """
+    global_rotation = np.eye(3)
+    parents = [-1,  0,  0,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  9,  9, 12, 13, 14, 16, 17, 18, 19]
+    while joint_idx != -1:
+        joint_rotation = R.from_rotvec(pose_axis_anges[joint_idx]).as_matrix()
+        global_rotation = joint_rotation @ global_rotation
+        joint_idx = parents[joint_idx]
+    return global_rotation
 def update_hand_pose(hand_poses,global_orient,body_params,frame_idx):
+    M = np.diag([-1, 1, 1])
 
     body_pose = body_params[frame_idx].detach().cpu().numpy().reshape(1, -1)
     global_orient = global_orient[frame_idx].detach().cpu().numpy().reshape(1, 3)
@@ -211,16 +227,16 @@ class KeyPointApp:
         self.style.configure("Info.TLabel", font=INFO_FONT)
 
     def load_config_files(self):
-        with open(resource_path("part_kp.json"), "r") as file:
+        with open(resource_path("./data/part_kp.json"), "r") as file:
             self.all_joint = json.load(file)
         for joint, value in self.all_joint.items():
             self.human_joint_positions[joint] = value['point']
 
-        with open(resource_path("main_joint.json"), "r") as file:
+        with open(resource_path("./data/main_joint.json"), "r") as file:
             self.main_joint_coord = json.load(file)
-        with open(resource_path("joint_tree.json"), "r") as file:
+        with open(resource_path("./data/joint_tree.json"), "r") as file:
             self.joint_tree = json.load(file)
-        with open(resource_path("button_name.json"), "r", encoding='utf-8') as file:
+        with open(resource_path("./data/button_name.json"), "r", encoding='utf-8') as file:
             self.button_name = json.load(file)
 
     def setup_ui(self):
@@ -532,7 +548,7 @@ class KeyPointApp:
         self.global_body_params = output["smpl_params_global"]
 
         self.hand_poses = json.load(open(os.path.join(args.video_dir, 'motion/hand_pose.json')))
-        self.human_part = json.load(open(f"{resource_path('video_optimizer/data/part_kp.json')}"))
+        self.human_part = json.load(open(f"{resource_path('./data/part_kp.json')}"))
         self.K = output['K_fullimg'][0]
         self.output = output
         self.R = torch.eye(3, dtype=torch.float32)
@@ -545,7 +561,7 @@ class KeyPointApp:
                 "right_hand"] \
                 = update_hand_pose(self.hand_poses, self.body_params["global_orient"], self.body_params["body_pose"], i)
 
-        with open(f'{args.video_dir}/output/obj_poses.json') as f:
+        with open(f'{args.video_dir}/align/obj_poses.json') as f:
             self.object_poses = json.load(f)
 
         self.obj_org = mesh = o3d.io.read_triangle_mesh(f"{args.video_dir}/obj_org.obj")
@@ -596,7 +612,7 @@ class KeyPointApp:
 
     def setup_human_keypoints(self):
         obj_img_size = 480, 480
-        img = Image.open(resource_path("human_kp.png"))
+        img = Image.open(resource_path("./data/human_kp.png"))
         human_img_width, human_img_height = img.size
         img = img.resize(obj_img_size, Image.Resampling.LANCZOS)
         self.human_img = ImageTk.PhotoImage(img)
