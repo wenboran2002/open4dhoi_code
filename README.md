@@ -59,7 +59,9 @@ The data structure should be like this:
 ./demo
 ├── align ## depth alignment result for initialization
 ├── motion ## motion reconstruction from GVHMR
-├── video 
+├── video.mp4
+├── human_mask_dir
+├── mask_dir
 └── obj_org.obj ## object model
 ```
 
