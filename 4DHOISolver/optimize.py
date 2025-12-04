@@ -93,6 +93,7 @@ def validate_dof(kp_dir: str, start_frame: int, end_frame: int) -> bool:
         return False
     return True
 
+
 def validate_dof_from_merged(merged: dict, start_frame: int, end_frame: int) -> bool:
     invalid = []
     for frame_idx in range(start_frame, end_frame + 1):
@@ -135,6 +136,8 @@ def assemble_preview_video(optimized_dir: str, output_path: str, fps: float = 18
             out.write(fr)
     out.release()
     print(f"Preview video saved to: {output_path}")
+
+
 def optimize_single_record(record):
     video_dir = record
     print(f"Video directory: {video_dir}")
@@ -159,7 +162,7 @@ def optimize_single_record(record):
         print("Cannot read video or video is empty")
         return False
 
-    merged_path = os.path.join(video_dir, f"{video_dir.split('/')[-1]}.json")
+    merged_path = os.path.join(video_dir, f"kp_record_merged.json")
     if not os.path.exists(merged_path):
         print(f"Cannot find merged annotation file: {merged_path}, please save it in the annotation tool first.")
         return False
@@ -348,6 +351,7 @@ def optimize_single_record(record):
     with open(os.path.join(video_dir, "optimize_summary.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
     return True
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', required=True, help='folder containing final_optimized_parameters')

@@ -1,33 +1,11 @@
-# 🎯 4DHOISolver
-
-4DHOISolver is a tool for optimizing and rendering 4D human-object interaction sequences. It takes annotated video data and produces optimized human body parameters and object poses in a global coordinate system.
-
-## 🚀 Quick Start
-
-### 📦 Environment Setup
-
-```bash
-conda create -n open4d_hoi python=3.10
-pip install -r requirement.txt
-cd multiperson/sdf && pip install -e . --no-build-isolation && cd ../..
-cd neural_renderer && pip install -e . --no-build-isolation && cd ../..
-```
-
-### 🔑 Download SMPL-X Model
-
-1. Download `SMPLX_NEUTRAL.npz` from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/download.php)
-```bash
-mkdir -p video_optimizer/smpl_models
-mv SMPLX_NEUTRAL.npz video_optimizer/smpl_models/
-```
 
 ### 🎬 Usage
 
 
-Run optimization on all records with annotation progress 4:
+Run optimization on any record:
 
 ```bash
-python optimize.py
+python optimize.py --data_dir [data]
 ```
 
 **Output structure:**

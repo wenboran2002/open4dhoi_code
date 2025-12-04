@@ -39,3 +39,4 @@ pycocotools==2.0.8
 
 
 ttkbootstrap==1.14.2
+colorlog==6.10.1

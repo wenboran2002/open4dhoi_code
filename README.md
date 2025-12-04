@@ -43,6 +43,7 @@
 conda create -n 4dhoi_solver python=3.10
 conda activate 4dhoi_solver
 pip install torch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+
 # install pytorch3d
 pip install "git+https://github.com/facebookresearch/pytorch3d.git"
 pip install -r requirements.txt
@@ -73,11 +74,34 @@ pip install -e .
 ```
 
 ### Usage
-See `Annot-app/co-tracker/README.md` for more details.
+See `Annot-app/README.md` for more details.
 
 
 
+## 🎯 4DHOISolver
 
+4DHOISolver is a tool for optimizing and rendering 4D human-object interaction sequences. It takes annotated video data and produces optimized human body parameters and object poses in a global coordinate system.
+
+
+### 📦 Environment Setup
+
+```bash
+# install GVHMR
+git clone https://github.com/zju3dv/GVHMR.git 
+cd GVHMR && pip install -e .
+cd multiperson/sdf && pip install -e . --no-build-isolation && cd ../..
+cd neural_renderer && pip install -e . --no-build-isolation && cd ../..
+```
+
+### 🔑 Download SMPL-X Model
+
+1. Download `SMPLX_NEUTRAL.npz` from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/download.php)
+```bash
+mkdir -p video_optimizer/smpl_models
+mv SMPLX_NEUTRAL.npz video_optimizer/smpl_models/
+```
+### Usage
+See `4DHOISolver/README.md` for more details.
 
 
 ## 📖 Citation
