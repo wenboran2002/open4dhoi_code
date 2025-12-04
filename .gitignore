@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 *.so
 .DS_Store
+demo/
 
 # Annot-app
 Annot-app/data_to_annotate

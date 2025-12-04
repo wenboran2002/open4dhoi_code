@@ -1,7 +1,0 @@
-
-[all]
-matplotlib
-
-[dev]
-flake8
-black
