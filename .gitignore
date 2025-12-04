@@ -12,3 +12,5 @@ Annot-app/data/SMPLX_NEUTRAL.npz
 
 ## 4DHOISolver
 4DHOISolver/video_optimizer/smpl_models/*
+
+pytorch3d

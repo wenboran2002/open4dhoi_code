@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: cotracker
+Version: 3.0
+License-File: LICENSE.md
+Provides-Extra: all
+Requires-Dist: matplotlib; extra == "all"
+Provides-Extra: dev
+Requires-Dist: flake8; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Dynamic: license-file
+Dynamic: provides-extra

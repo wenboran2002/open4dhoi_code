@@ -7,6 +7,8 @@
 ### 📦 Environment Setup
 
 ```bash
+conda create -n open4d_hoi python=3.10
+pip install -r requirement.txt
 cd multiperson/sdf && pip install -e . --no-build-isolation && cd ../..
 cd neural_renderer && pip install -e . --no-build-isolation && cd ../..
 ```

@@ -42,6 +42,9 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 ```bash
 conda create -n 4dhoi_solver python=3.10
 conda activate 4dhoi_solver
+pip install torch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+# install pytorch3d
+pip install "git+https://github.com/facebookresearch/pytorch3d.git"
 pip install -r requirements.txt
 ```
 
