@@ -1,6 +1,6 @@
 <div align="center">
 
-Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
+**Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction**
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)](https://arxiv.org/abs/2512.00960)
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://wenboran2002.github.io/open4dhoi/)
