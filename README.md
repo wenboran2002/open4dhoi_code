@@ -26,7 +26,7 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 
 [2025-12-02] Annotate app code released!
 
-<!-- [2025-12-03] 4DHOISolver code released! -->
+[2025-12-03] 4DHOISolver code released!
 
 ## 🚀 To Do
 
@@ -40,7 +40,7 @@ Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction
 
 
 ```bash
-conda env create -n 4dhoi_solver python=3.10
+conda create -n 4dhoi_solver python=3.10
 conda activate 4dhoi_solver
 pip install -r requirements.txt
 ```
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 ## 🖥️  Annotate app
 
 ### Data Preparation
-You can download the test data from [Google Drive](https://drive.google.com/uc?export=download&id=1a9iUSfuuBrB2q6iewi4uxMAB9XIrvuJo) and place it in ./demo.
+You can download the test data from [Google Drive](https://drive.google.com/uc?export=download&id=10-9jPz1tHTsnNuR-tp_Q_deI1S34WiO6) and place it in ./demo.
 
 The data structure should be like this:
 ```
