@@ -23,15 +23,8 @@ def resource_path(relative_path):
 
 class HOISolver:
     def __init__(self, model_folder, device=None):
-        """
-        初始化HOI求解器
-        Args:
-            model_folder: SMPL-X模型文件路径
-            device: 计算设备，默认自动选择
-        """
         self.device = device if device else torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        # 初始化SMPL-X模型
         self.model = smplx.create(model_folder, model_type='smplx',
                                   gender='neutral',
                                   num_betas=10,
@@ -39,18 +32,16 @@ class HOISolver:
                                   use_pca=False,
                                   num_expression_coeffs=10).to(self.device)
 
-        # 定义四肢关节名称到SMPL-X关节索引的映射
         self.limb_joint_names_to_idx = {
-            'left_foot': 7,  # 左脚踝
-            'right_foot': 8,  # 右脚踝
-            'left_wrist': 20,  # 左手腕
-            'right_wrist': 21  # 右手腕
+            'left_foot': 7,
+            'right_foot': 8,
+            'left_wrist': 20,
+            'right_wrist': 21
         }
 
         print(f"HOI Solver initialized on device: {self.device}")
 
     def save_mesh_as_obj(self, vertices, faces, filename):
-        """保存网格为OBJ文件"""
         mesh = o3d.geometry.TriangleMesh()
         mesh.vertices = o3d.utility.Vector3dVector(vertices)
         mesh.triangles = o3d.utility.Vector3iVector(faces.astype(np.int32))
@@ -59,14 +50,12 @@ class HOISolver:
         print(f"Saved mesh to {filename}")
 
     def apply_transform_to_model(self, vertices, transform_matrix):
-        """对顶点应用变换矩阵"""
         homogenous_verts = np.hstack([vertices, np.ones((len(vertices), 1))])
         transformed = (transform_matrix @ homogenous_verts.T).T
         return transformed[:, :3] / transformed[:, [3]]
 
 
     def get_corresponding_point(self, object_points_idx, body_points_idx, body_points, object_mesh):
-        """获取人体和物体的对应点"""
         interacting_indices = object_points_idx[:, 1] != 0
         interacting_body_indices = np.asarray(body_points_idx)[interacting_indices]
 
@@ -87,7 +76,6 @@ class HOISolver:
         return corresponding_points
 
     def rigid_transform_svd_with_corr(self, A, B):
-        """使用SVD计算刚体变换"""
         centroid_A = A.mean(axis=0)
         centroid_B = B.mean(axis=0)
         AA = A - centroid_A
@@ -107,7 +95,6 @@ class HOISolver:
         return T
 
     def residuals_with_corr(self, x, A, B):
-        """用于最小二乘优化的残差函数"""
         rot_vec = x[:3]
         t = x[3:]
         R_mat = R.from_rotvec(rot_vec).as_matrix()
@@ -115,7 +102,6 @@ class HOISolver:
         return (A_trans - B).ravel()
 
     def refine_rigid_with_corr(self, A, B, x0=None):
-        """使用最小二乘法精化刚体变换"""
         if x0 is None:
             T0 = self.rigid_transform_svd_with_corr(A, B)
             rot0 = R.from_matrix(T0[:3, :3]).as_rotvec()
@@ -134,7 +120,6 @@ class HOISolver:
                                    target_joint_idxs, target_positions,
                                    constraint_joint_idxs, constraint_positions,
                                    lr=1.0):
-        """选择性IK优化步骤"""
         global_orient = global_orient.clone().detach().requires_grad_(True)
         body_pose = body_pose.clone().detach().requires_grad_(True)
 
@@ -148,14 +133,12 @@ class HOISolver:
         total_loss = 0
         loss_count = 0
 
-        # 目标关节的损失
         for i, joint_idx in enumerate(target_joint_idxs):
             joint_pred = joints[joint_idx]
             target_pos = target_positions[i]
             total_loss += torch.nn.functional.mse_loss(joint_pred, target_pos)
             loss_count += 1
 
-        # 约束关节的损失
         for i, joint_idx in enumerate(constraint_joint_idxs):
             joint_pred = joints[joint_idx]
             constraint_pos = constraint_positions[i]
@@ -176,11 +159,9 @@ class HOISolver:
     def run_joint_ik(self, global_orient, body_pose, betas, transl,
                      target_joints_dict, constraint_joints_list,
                      max_iter=40, lr=1.5):
-        """运行关节特定IK优化"""
         target_joint_idxs = list(target_joints_dict.keys())
         target_offsets = list(target_joints_dict.values())
 
-        # 获取初始约束关节相对位置
         with torch.no_grad():
             output = self.model(global_orient=global_orient,
                                 body_pose=body_pose,
@@ -211,14 +192,12 @@ class HOISolver:
                 lr=lr
             )
 
-            # print(f"[Iter {i:02d}] Joint IK Loss: {loss:.6f}")
             if loss < 1e-5:
                 break
 
         return global_orient, body_pose
 
     def check_limb_joints_in_corresp(self, corresp, body_points_idx, joint_mapping, part_kp_file):
-        """检查对应关系中是否包含四肢关节"""
         with open(part_kp_file, 'r') as f:
             human_part = json.load(f)
 
@@ -245,29 +224,8 @@ class HOISolver:
     def solve_hoi(self, obj_init, obj_sample_init, body_params, global_body_params, i, start_frame, end_frame, hand_poses,
                   object_points_idx, body_points_idx, object_points, image_points, joint_mapping, K=None,
                   part_kp_file=resource_path("video_optimizer/data/part_kp.json"), save_meshes=False, all_mutiview_info=None, is_multiview=False):
-        """
-        直接求解HOI，输入预处理的物体和人体参数
-        Args:
-            obj_init: 原始物体网格
-            obj_sample_init: 采样的物体网格
-            body_params: 包含多帧信息的人体参数字典
-            i: 当前帧在序列中的索引
-            start_frame, end_frame: 帧范围
-            hand_poses: 手部姿态
-            object_points_idx: 物体点索引
-            body_points_idx: 人体点索引
-            object_points: 用于2D-3D对应的物体点
-            image_points: 用于2D-3D对应的图像点
-            K: 相机内参
-            joint_mapping: 关节映射字典
-            part_kp_file: 人体关键点文件路径
-            save_meshes: 是否保存网格文件
-            is_multiview: 是否为多视角优化
-            cam_params: 多视角相机的参数 (K, R, T)
-        """
         print("Starting HOI solving with direct inputs...")
 
-        # 从human_params中提取参数
         body_pose = body_params["body_pose"][i + start_frame].reshape(1, -1).cuda()
         global_orient = body_params["global_orient"][i + start_frame].reshape(1, 3).cuda()
         shape = body_params["betas"][i + start_frame].reshape(1, -1).cuda()
@@ -276,7 +234,6 @@ class HOISolver:
         left_hand_pose = np.array(hand_poses[str(i + start_frame)]["left_hand"])
         right_hand_pose = np.array(hand_poses[str(i + start_frame)]["right_hand"])
 
-        # 生成初始人体网格
         output = self.model(betas=shape,
                          body_pose=body_pose,
                          left_hand_pose=torch.from_numpy(left_hand_pose).float().cuda(),
@@ -293,7 +250,6 @@ class HOISolver:
         if save_meshes:
             self.save_mesh_as_obj(hpoints, self.model.faces, "human_before_ik.obj")
 
-        # Step 1: ICP对齐
         object_points_idx = object_points_idx[i]
         body_points_idx = body_points_idx[i]
 
@@ -301,7 +257,6 @@ class HOISolver:
         image_points = image_points[i].reshape(-1, 2)
 
 
-        # time1 = time.time()
         print("Starting ICP alignment...")
         corresp = self.get_corresponding_point(object_points_idx, body_points_idx, hpoints, obj_init)
         print(f"Correspondence points shape: {corresp['body_points'].shape}")
@@ -316,93 +271,69 @@ class HOISolver:
             incam_params = None
             global_params = None
         R_opt, t_opt = solve_weighted_priority(incam_params, global_params, source_points_3d, target_points_3d, object_points, image_points, K, all_mutiview_info, weight_3d=900.0, weight_2d=2.0)
-        # 对物体应用变换
         transform_matrix = np.eye(4)
         transform_matrix[:3, :3] = R_opt
         transform_matrix[:3, 3] = t_opt.flatten()
 
-        # if save_meshes:
-        # print('transf',R_opt,t_opt)
-        # overts=deepcopy(np.asarray(obj_init.vertices))
-        # overts_transformed = self.apply_transform_to_model(overts, transform_matrix)
-        # obj_oo=o3d.geometry.TriangleMesh()
-        # obj_oo.vertices=o3d.utility.Vector3dVector(overts_transformed)
-        # obj_oo.triangles=o3d.utility.Vector3iVector(np.asarray(obj_init.triangles).astype(np.int32))
-        # h_pcd=o3d.geometry.TriangleMesh()
-        # h_pcd.vertices=o3d.utility.Vector3dVector(hpoints)
-        # h_pcd.triangles=o3d.utility.Vector3iVector(self.model.faces.astype(np.int32))
-        # o3d.io.write_triangle_mesh("object_after_icp.obj", obj_oo+h_pcd)
-        # print("ICP alignment completed.")
-        # time2 = time.time()
-        # print(f"ICP alignment time: {time2 - time1}")
-        # Step 2: 检查是否需要IK优化
-        # time3 = time.time()
-        # target_joints, constraint_joints = self.check_limb_joints_in_corresp(
-        #     corresp, body_points_idx, joint_mapping, part_kp_file)
+        target_joints, constraint_joints = self.check_limb_joints_in_corresp(
+            corresp, body_points_idx, joint_mapping, part_kp_file)
 
-        # if target_joints:
-        #     print(f"Found limb joints to optimize: {list(target_joints.keys())}")
-        #     print(f"Constraint joints: {constraint_joints}")
+        if target_joints:
+            print(f"Found limb joints to optimize: {list(target_joints.keys())}")
+            print(f"Constraint joints: {constraint_joints}")
 
-        #     # 获取ICP后的物体对应点位置
-        #     transformed_obj_points = (transform_matrix @ np.hstack([source_points_3d, np.ones((source_points_3d.shape[0], 1))]).T).T[:,
-        #                              :3]
+            transformed_obj_points = (transform_matrix @ np.hstack([source_points_3d, np.ones((source_points_3d.shape[0], 1))]).T).T[:,
+                                     :3]
 
-        #     # 获取当前人体关节位置
-        #     with torch.no_grad():
-        #         output = self.model(betas=shape,
-        #                             body_pose=body_pose,
-        #                             jaw_pose=zero_pose,
-        #                             leye_pose=zero_pose,
-        #                             reye_pose=zero_pose,
-        #                             global_orient=global_orient,
-        #                             expression=torch.zeros((1, 10)).float().to(self.device),
-        #                             transl=transl)
-        #         joints = output.joints[0]
-        #         pelvis = joints[0]
+            with torch.no_grad():
+                output = self.model(betas=shape,
+                                    body_pose=body_pose,
+                                    jaw_pose=zero_pose,
+                                    leye_pose=zero_pose,
+                                    reye_pose=zero_pose,
+                                    global_orient=global_orient,
+                                    expression=torch.zeros((1, 10)).float().to(self.device),
+                                    transl=transl)
+                joints = output.joints[0]
+                pelvis = joints[0]
 
-        #     # 为每个目标关节设置新的目标位置
-        #     target_joints_dict = {}
-        #     for joint_idx, corresp_pos in target_joints.items():
-        #         target_world_pos = torch.tensor(transformed_obj_points[corresp_pos],
-        #                                         device=self.device, dtype=torch.float32)
-        #         target_offset = target_world_pos - pelvis
-        #         target_joints_dict[joint_idx] = target_offset
+            target_joints_dict = {}
+            for joint_idx, corresp_pos in target_joints.items():
+                target_world_pos = torch.tensor(transformed_obj_points[corresp_pos],
+                                                device=self.device, dtype=torch.float32)
+                target_offset = target_world_pos - pelvis
+                target_joints_dict[joint_idx] = target_offset
 
-        #     # 执行IK优化
-        #     print("Starting IK optimization...")
-        #     global_orient_new, body_pose_new = self.run_joint_ik(
-        #         global_orient, body_pose, shape, transl,
-        #         target_joints_dict=target_joints_dict,
-        #         constraint_joints_list=constraint_joints,
-        #         max_iter=10, lr=1.0
-        #     )
+            print("Starting IK optimization...")
+            global_orient_new, body_pose_new = self.run_joint_ik(
+                global_orient, body_pose, shape, transl,
+                target_joints_dict=target_joints_dict,
+                constraint_joints_list=constraint_joints,
+                max_iter=10, lr=1.0
+            )
 
-        #     # 保存IK后的人体网格
-        #     if save_meshes:
-        #         output = self.model(betas=shape,
-        #                             body_pose=body_pose_new,
-        #                             jaw_pose=zero_pose,
-        #                             leye_pose=zero_pose,
-        #                             reye_pose=zero_pose,
-        #                             global_orient=global_orient_new,
-        #                             expression=torch.zeros((1, 10)).float().to(self.device),
-        #                             transl=transl)
+            if save_meshes:
+                output = self.model(betas=shape,
+                                    body_pose=body_pose_new,
+                                    jaw_pose=zero_pose,
+                                    leye_pose=zero_pose,
+                                    reye_pose=zero_pose,
+                                    global_orient=global_orient_new,
+                                    expression=torch.zeros((1, 10)).float().to(self.device),
+                                    transl=transl)
 
-        #         vertices_after_ik = output.vertices[0].detach().cpu().numpy()
-        #         self.save_mesh_as_obj(vertices_after_ik, self.model.faces, "human_after_ik.obj")
+                vertices_after_ik = output.vertices[0].detach().cpu().numpy()
+                self.save_mesh_as_obj(vertices_after_ik, self.model.faces, "human_after_ik.obj")
 
-        #     print("HOI solving completed with IK optimization!")
-        #     time4 = time.time()
-        #     print(f"IK optimization time: {time4 - time3}")
-        #     return {
-        #         'global_orient': global_orient_new,
-        #         'body_pose': body_pose_new,
-        #         'icp_transform_matrix': transform_matrix,
-        #         'optimized_joints': list(target_joints.keys()),
-        #     }
-        # else:
-            # print("No limb joints found for IK optimization. Only ICP alignment performed.")
+            print("HOI solving completed with IK optimization!")
+            return {
+                'global_orient': global_orient_new,
+                'body_pose': body_pose_new,
+                'icp_transform_matrix': transform_matrix,
+                'optimized_joints': list(target_joints.keys()),
+            }
+        else:
+            print("No limb joints found for IK optimization. Only ICP alignment performed.")
         return {
             'global_orient': global_orient,
             'body_pose': body_pose,
